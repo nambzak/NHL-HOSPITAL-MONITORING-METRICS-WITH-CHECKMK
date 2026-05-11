@@ -105,6 +105,7 @@ Runs daily at 7:00 AM EAT (Kampala, Uganda).
 ### Manual Execution
 ```bash
 python3 /opt/checkmk_daily_report.py
+```
 
 Report Structure
 Header — Nakasero Hospital branding with timestamp
