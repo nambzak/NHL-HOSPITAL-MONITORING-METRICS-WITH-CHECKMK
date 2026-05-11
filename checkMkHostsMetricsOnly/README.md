@@ -79,6 +79,7 @@ text
 ### Manual Execution
 ```bash
 python3 /opt/checkmk_hosts_report.py
+```
 Severity Thresholds
 Usage	Color	Indication
 < 50%	Green	Healthy
