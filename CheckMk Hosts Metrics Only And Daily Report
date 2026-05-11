@@ -1,0 +1,86 @@
+# Checkmk Hosts Daily Report
+
+A Python-based automated reporting system that generates daily HTML email reports
+and PDF attachments for IT infrastructure monitored by Checkmk at Nakasero Hospital.
+
+**Author:** Buyinga Isaac Nambafu  
+**Role:** ICT Infrastructure Officer  
+**Organization:** Nakasero Hospital
+
+---
+
+## Overview
+
+This script connects to Checkmk's Livestatus Unix socket to retrieve real-time host
+and service data, then generates a professionally formatted report with graphs and
+tables. Reports are delivered via email with a PDF attachment.
+
+---
+
+## Features
+
+- Connects to Checkmk Livestatus Unix socket for host and service metrics
+- Retrieves: CPU utilization, memory usage, disk usage, and uptime
+- VMware vSphere-specific metric parsing for ESXi hosts
+- Datastore usage analysis for hosts with filesystem services
+- Generates per-host horizontal bar charts (CPU, Memory, Disk)
+- Generates datastore usage charts with color-coded thresholds
+- Creates overview donut chart of host states (UP/DOWN/UNREACHABLE)
+- Creates grouped bar chart of top 12 high-resource-usage hosts (≥75%)
+- Produces multi-page A4 PDF report with styled tables and embedded graphs
+- Creates responsive HTML email with embedded base64 images
+- Sends email via Zoho SMTP with PDF attachment
+- Configurable host exclusion and vSphere host identification
+
+---
+
+## Configuration
+
+| Setting | Description |
+|---------|-------------|
+| `LIVESTATUS_SOCKET` | Path to Checkmk Livestatus Unix socket |
+| `CHECKMK_URL` | Base URL of Checkmk instance |
+| `SMTP_SERVER` | Zoho SMTP server (`smtppro.zoho.com`) |
+| `SMTP_PORT` | SMTP port (`465` for SSL) |
+| `SMTP_USER` | Sender email address |
+| `SMTP_PASSWORD` | Email account password |
+| `RECIPIENTS` | List of email recipients |
+| `SKIP_HOSTS` | Hostnames to exclude from report |
+| `VSPHERE_HOSTS` | Hostnames requiring VMware-specific parsing |
+
+---
+
+## Dependencies
+matplotlib>=3.0
+reportlab>=3.5
+numpy>=1.18
+
+---
+
+## Output
+
+| File | Description |
+|------|-------------|
+| `/tmp/nakasero_daily_report.pdf` | Generated PDF report |
+| `/tmp/nakasero_graphs/` | Directory with generated PNG graphs |
+
+---
+
+## Usage
+
+### Cron Job
+0 7 * * * python3 /opt/checkmk_hosts_report.py >> /var/log/nakasero_report.log 2>&1
+
+
+### Manual Execution
+```bash
+python3 /opt/checkmk_hosts_report.py
+Severity Thresholds
+Usage	Color	Indication
+< 50%	Green	Healthy
+50–74%	Yellow	Moderate
+75–89%	Orange	Warning
+≥ 90%	Red	Critical
+
+License
+Proprietary — Nakasero Hospital ICT Department. All rights reserved.
